@@ -5,11 +5,5 @@
  * @returns {number}
  */
 export default function sum(m, n) {
-  if (m===undefined) {
-    return m;
-  }
-  if (n===undefined) {
-    return n;
-  }
   return m + n;
 }
