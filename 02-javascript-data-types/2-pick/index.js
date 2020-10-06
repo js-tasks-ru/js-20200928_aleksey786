@@ -5,5 +5,11 @@
  * @returns {object} - returns the new object
  */
 export const pick = (obj, ...fields) => {
-
+  const copy = {};
+  // так как fields - часть полей объекта,
+  // то быстрее пробежатся по ним, чем по всем полям объекта
+  for (const item of fields) {
+    copy[item] = obj[item];
+  }
+  return copy;
 };

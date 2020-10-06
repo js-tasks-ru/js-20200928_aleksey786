@@ -6,13 +6,17 @@
  */
 
 export function sortStrings(arr, param = 'asc') {
-  const sortarr = [...arr];
-  const LOCALES = ["ru","en"];
-  const COMPARE_OPT = {sensitivity: "case", caseFirst: "upper"};
-  if (param === 'asc') {
-    sortarr.sort((a, b) => a.localeCompare(b, LOCALES, COMPARE_OPT));
-  } else {
-    sortarr.sort((a, b) => b.localeCompare(a, LOCALES, COMPARE_OPT));
+  switch (param) {
+    case 'asc':  return sortStr(arr, 1);
+    case 'desc': return sortStr(arr, -1);
+    default:
+      return [...arr];
   }
-  return sortarr;
+}
+
+function sortStr(arr, direction) {
+  const sortarr = [...arr];
+  const LOCALES = ["ru", "en"];
+  const COMPARE_OPT = {sensitivity: "case", caseFirst: "upper"};
+  return sortarr.sort((a, b) => direction * a.localeCompare(b, LOCALES, COMPARE_OPT));;
 }

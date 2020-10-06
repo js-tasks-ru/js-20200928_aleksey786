@@ -4,5 +4,13 @@
  * @returns {*[]} - the new array with uniq values
  */
 export function uniq(arr) {
+  if (arr === undefined || arr.length === 0) return [];
 
+  const obj = {};
+
+  for (const v of arr) {
+    obj['prefix' + v] = v; // префикс, чтобы по порядку было, если цифры в массиве
+  }
+
+  return Object.values(obj);
 }
