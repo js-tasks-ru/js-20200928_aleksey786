@@ -5,11 +5,12 @@
  */
 export function createGetter(path) {
   const props = path.split('.');
-  return function (obj) {
-    if (Object.keys(obj).length == 0) return undefined;
 
-    return props.reduce(function (o, key) {
-      return o[key];
+  return function (obj) {
+    if (Object.keys(obj).length == 0) return;
+
+    return props.reduce(function (object, key) {
+      return object[key];
     }, obj);
   }
 }

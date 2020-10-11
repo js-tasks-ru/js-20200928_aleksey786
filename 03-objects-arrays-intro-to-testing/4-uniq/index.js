@@ -14,5 +14,5 @@ export function uniq(arr) {
   }
 
   return Object.values(obj); */
-  return [...new Set(arr).values()];
+  return [...new Set(arr)];
 }
