@@ -1,4 +1,5 @@
 export default class NotificationMessage {
+  static activeNotificationElement;
   element; // HTMLElement;
 
   constructor(message = '',
@@ -10,11 +11,7 @@ export default class NotificationMessage {
     this.progressValue = duration / 1000;
     this.type = type;
     this.render();
-    this.initEventListeners();
   }
-
-  initEventListeners() {}
-
 
   render() {
     const div = document.createElement('div');
@@ -33,9 +30,18 @@ export default class NotificationMessage {
   }
 
   show(target = document.body) {
+    /* В один момент времени на странице может быть показано только одно сообщение,
+       другими словами, если на странице уже присутствовало сообщение - его необходимо скрыть.
+       Строка clearTimeout(this.timerId); это реализует.
+       Подумал, что если повторно Show вызвать до момента окончания показа, то нужно предыдущее убрать,
+       а не когда два разных объекта */
+    if (NotificationMessage.activeNotificationElement) {
+      NotificationMessage.activeNotificationElement.remove();
+    }
     clearTimeout(this.timerId);
     target.append(this.element);
     this.timerId = setTimeout(() => this.remove(), this.duration);
+    NotificationMessage.activeNotificationElement = this.element;
   }
 
   remove () {
