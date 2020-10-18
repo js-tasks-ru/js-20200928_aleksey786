@@ -18,7 +18,7 @@ export default class SortableTable {
   }
 
   template (tableData) {
-     return `<div class="sortable-table__header sortable-table__row">
+    return `<div class="sortable-table__header sortable-table__row">
                 ${this.getTableHead()}
              </div>
              <div data-element="body" class="sortable-table__body">
@@ -29,7 +29,7 @@ export default class SortableTable {
 
   getTableHead () {
     return this.header.map(value => {
-        return `<div class="sortable-table__cell">${value.title}</div>`;
+      return `<div class="sortable-table__cell">${value.title}</div>`;
     }).join("");
   }
 
@@ -78,4 +78,3 @@ export default class SortableTable {
     this.remove();
   }
 }
-
