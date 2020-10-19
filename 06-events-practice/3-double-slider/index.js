@@ -1,16 +1,5 @@
 export default class DoubleSlider {
   element; // HTMLElement
-  leftSlider; // HTMLElement
-  rightSlider; // HTMLElement
-  innerElement; // HTMLElement
-  from; // HTMLElement
-  to; // HTMLElement
-  min; // number
-  max; // number
-  range; // number = max - min
-  formatValue; // function
-  selected; // default slider position
-
   downElement = {};
 
   constructor({
@@ -89,16 +78,17 @@ export default class DoubleSlider {
     const style = this.downElement.style; // left or right
     const sliderX = this.downElement.sliderX;
     const border = this.downElement.border;
+    const innerElementX = this.innerElement.getBoundingClientRect()[style];
     let newPosition;
 
     if (slider === this.leftSlider) {
-      newPosition = (event.clientX
-        - this.innerElement.getBoundingClientRect()[style]
-        + this.downElement.offset);
+      newPosition = event.clientX
+        - innerElementX
+        + this.downElement.offset;
     } else {
-      newPosition = (this.innerElement.getBoundingClientRect()[style]
+      newPosition = innerElementX
        - event.clientX
-       - this.downElement.offset);
+       - this.downElement.offset;
     }
 
     newPosition /= this.innerElement.getBoundingClientRect().width;

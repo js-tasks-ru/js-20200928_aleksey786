@@ -24,7 +24,13 @@ class Tooltip {
     const element = event.target.closest('[data-tooltip]');
     if (element) {
       this.render(element.dataset.tooltip, event.clientX, event.clientY);
+      document.addEventListener('pointermove', this.onPointerMove);
     }
+  };
+
+  onPointerMove = event => {
+    this.element.style.left = event.clientX + "px";
+    this.element.style.top = event.clientY + "px";
   };
 
   onPointerOut = () => {
@@ -42,6 +48,7 @@ class Tooltip {
 
   remove () {
     if (this.element) this.element.remove();
+    document.removeEventListener('pointermove', this.onPointerMove);
   }
 
   destroy() {
