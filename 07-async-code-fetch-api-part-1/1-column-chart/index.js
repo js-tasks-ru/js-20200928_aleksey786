@@ -25,13 +25,11 @@ export default class ColumnChart {
   getDataHTML() {
     const maxValue = Math.max(...this.data);
     const scale = this.chartHeight / maxValue;
-    return this.data.reduce(function (dataHTML, value) {
-        return dataHTML +
-          `<div style="--value:${Math.floor(value * scale)}"
-                data-tooltip="${(value / maxValue * 100).toFixed(0)}%">
-           </div>`
-      }
-      , '');
+    return Object.entries(this.data).map(value => {
+          return `<div style="--value:${Math.floor(value * scale)}"
+                  data-tooltip="${(value / maxValue * 100).toFixed(0)}%">
+             </div>`
+    }).join("");
   }
 
   getLinkHTML() {
