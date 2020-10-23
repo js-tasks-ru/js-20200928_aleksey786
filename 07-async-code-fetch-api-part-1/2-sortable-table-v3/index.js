@@ -23,9 +23,15 @@ export default class SortableTable {
     this.url.searchParams.set("_order", this.sortOrder);
     this.url.searchParams.set("_start", this.startLoadRecord);
     this.url.searchParams.set("_end", this.endLoadRecord);
+    this.element.classList.add("sortable-table_loading");
     const response = await fetch(this.url.toString());
     const data = await response.json();
     //TODO: обработку ошибок сделать
+    this.element.classList.remove("sortable-table_loading");
+    this.subElements.empty.className = "sortable-table__empty-placeholder";
+    if (!data.length) {
+       this.subElements.empty.classList.remove("sortable-table__empty-placeholder");
+    }
     return data;
   }
 
@@ -48,10 +54,12 @@ export default class SortableTable {
 
   async render() {
     const table = document.createElement('div');
+    table.className = "sortable-table";
     table.innerHTML = this.template(this.data);
     this.element = table;
     this.subElements = {body: table.querySelector('.sortable-table__body'),
       header: table.querySelector('.sortable-table__header'),
+      empty: table.querySelector('.sortable-table__empty-placeholder'),
     };
     this.setCurrentSortedElement(this.subElements.header.querySelector(`[data-field="${this.sortField}"]`), this.sortOrder);
     const data = await this.loadData();
@@ -99,11 +107,13 @@ export default class SortableTable {
   }
 
   onScroll = async (event) => {
-
-    if (document.documentElement.clientHeight > this.element.getBoundingClientRect().bottom) {
+    this.loaded
+    if (!this.isLoading && document.documentElement.clientHeight > this.element.getBoundingClientRect().bottom) {
         this.startLoadRecord = this.endLoadRecord;
        this.endLoadRecord += MAX_LOAD_RECORD;
+       this.isLoading = true;
        const data = await this.loadData();
+       this.isLoading = false;
        this.data = data;
        this.addRecords(data);
        this.data.concat(data);
@@ -123,7 +133,10 @@ export default class SortableTable {
              <div data-element="body" class="sortable-table__body">
                 ${this.getTableData(tableData)}
              </div>
-        `;
+             <div class="loading-line sortable-table__loading-line"></div>
+             <div class="sortable-table__empty-placeholder">
+                <p>Не найдено товаров удовлетворяющих выбранному критерию</p>
+             <div>`;
   }
 
   getTableHead () {
@@ -148,8 +161,9 @@ export default class SortableTable {
 
   getCellValue (row) {
     return this.header.map(value => {
-      const cellValue = (value.template) ? value.template(row[value.id]) : row[value.id];
-      return `<div class="sortable-table__cell">${cellValue}</div>`;}).join("");
+      return (value.template) ? value.template(row[value.id])
+                                : `<div class="sortable-table__cell">${row[value.id]}</div>`;
+        }).join("");
   }
 
   sort(field, order) {
