@@ -207,7 +207,7 @@ export default class ProductForm {
 
   getImageElement (url, name) {
         const element = document.createElement('li');
-        element.className = "products-edit__imagelist-item sortable-list__item";       
+        element.className = "products-edit__imagelist-item sortable-list__item";
         element.innerHTML = this.getImageItem(url, name);
         return element;
   }
@@ -256,12 +256,10 @@ export default class ProductForm {
         uploadImage.classList.remove('is-loading');
         uploadImage.disabled = false;
 
-        // Remove input from body
         fileInput.remove();
       }
     };
 
-    // must be in body for IE
     fileInput.hidden = true;
     document.body.appendChild(fileInput);
     fileInput.click();
