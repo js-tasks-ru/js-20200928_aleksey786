@@ -18,7 +18,7 @@ export default class SortableList {
       return;
     }
 
-    this.currentDroppable = event.target;
+    this.currentDroppable = event.target.closest('.sortable-list__item');
 
     this.createPlaceHolder(this.currentDroppable);
 
@@ -82,16 +82,10 @@ export default class SortableList {
   render() {
     const div = document.createElement('div');
     div.className = "sortable-list";
-
     const items = this.items.map(item => {
-        const element = document.createElement('div');
-        element.className = "sortable-list__item";
-        element.setAttribute("data-grab-handle",'')
-        element.innerHTML = `<span>${item.outerHTML}</span>
-                             <span data-delete-handle>remove</span>`;
-        return element;
-    })
-
+        item.classList.add("sortable-list__item");
+        return item;
+        })
     div.append(...items);
     this.element = div;
   }
