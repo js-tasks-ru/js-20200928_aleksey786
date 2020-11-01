@@ -7,6 +7,12 @@ export default class RangePicker {
               } = {}) {
     this.from = from;
     this.to = to;
+    this.months = new Array(12)
+      .fill(1)
+      .map((_, index) => {
+        return new Date(new Date().setMonth(index))
+          .toLocaleString('ru', { month: 'long'})
+      });
     this.visibleTo = new Date(to);
     this.render();
     this.initEventListeners();
@@ -202,35 +208,7 @@ export default class RangePicker {
   }
 
   monthName(month) {
-    // TODO: наверное есть что-то готовое, но в разделе о датах не нашел в учебнике... надо поискать, пока так
-    switch (month) {
-      case 0:
-        return "январь";
-      case 1:
-        return "феварь";
-      case 2:
-        return "март";
-      case 3:
-        return "апрель";
-      case 4:
-        return "май";
-      case 5:
-        return "июнь";
-      case 6:
-        return "июль";
-      case 7:
-        return "август";
-      case 8:
-        return "сентябрь";
-      case 9:
-        return "октябрь";
-      case 10:
-        return "ноябрь";
-      case 11:
-        return "декабрь";
-      default:
-        return '';
-    }
+    return this.months[month]
   }
 
   // TODO: наверное есть что-то готовое, но в разделе о датах не нашел в учебнике... надо поискать, пока так
@@ -241,15 +219,14 @@ export default class RangePicker {
   }
 
   dayOfWeekHTML() {
-    return `<div class="rangepicker__day-of-week">
-          <div>Пн</div>
-          <div>Вт</div>
-          <div>Ср</div>
-          <div>Чт</div>
-          <div>Пт</div>
-          <div>Сб</div>
-          <div>Вс</div>
-        </div>`;
+    const weekday = new Array(7)
+      .fill(1)
+      .map((_, index) => {
+          const date = new Date(2020, 9, 26 + index);
+          const day = date.toLocaleString('ru', {weekday: 'short'});
+          return `<div>${day}</div>`;
+      });
+    return `<div class="rangepicker__day-of-week">${weekday.join('')}</div>`;
   }
 
   remove() {

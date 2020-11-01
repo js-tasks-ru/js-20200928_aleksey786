@@ -68,7 +68,11 @@ export default class SortableTable {
     isSortLocally = false,
     step = 20,
     start = 1,
-    end = start + step
+    end = start + step,
+    range = {
+      from: new Date(),
+      to: new Date(),
+    },
   } = {}) {
 
     this.headersConfig = headersConfig;
@@ -78,6 +82,7 @@ export default class SortableTable {
     this.step = step;
     this.start = start;
     this.end = end;
+    this.range = range;
 
     this.render();
   }
@@ -99,7 +104,9 @@ export default class SortableTable {
     this.initEventListeners();
   }
 
-  async loadData(id, order, start = this.start, end = this.end) {
+  async loadData(id, order, start = this.start, end = this.end, from = this.range.from, to = this.range.to) {
+    this.url.searchParams.set('from', from);
+    this.url.searchParams.set('to', to);
     this.url.searchParams.set('_sort', id);
     this.url.searchParams.set('_order', order);
     this.url.searchParams.set('_start', start);
@@ -215,6 +222,11 @@ export default class SortableTable {
     const data = await this.loadData(id, order, start, end);
 
     this.renderRows(data);
+  }
+
+  async updateRange(range) {
+    this.range = range;
+    return await this.sortOnServer(this.sorted.id, this.sorted.order, this.start, this.end);
   }
 
   renderRows(data) {
